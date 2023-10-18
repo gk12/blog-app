@@ -1,5 +1,5 @@
 require('./db/db');
-import express,{Request,Response} from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import {
   deleteUsers,
   getUsers,
@@ -7,9 +7,32 @@ import {
   register,
   updateUsers,
 } from './controller/usercontroller';
+import jwt from 'jsonwebtoken';
 const app = express();
-app.use(express.json())
+app.use(express.json());
 const PORT = 4000;
+declare module 'express' {
+  interface Request {
+    user?: any;
+  }
+}
+function verifyToken(req: Request, res: Response, next: NextFunction) {
+  const token = req.header('Authorization');
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Unauthorized - Token not provided' });
+  }
+  const secretKey: string = 'python';
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Unauthorized - Invalid token' });
+    }
+    req.user = decoded;
+    next();
+  });
+}
 
 // login user
 app.post('/login', login);

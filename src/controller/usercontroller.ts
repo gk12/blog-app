@@ -2,6 +2,7 @@ import User from '../model/usermodel';
 import { User1 } from '../types/interface';
 import express, { Request, Response } from 'express';
 import hashPassword from './../middleware/hash'
+import bcrypt from 'bcrypt'
 
 export const register = async (req: Request, res: Response) => {
   const { username, name, password, email }:User1= req.body;
@@ -45,8 +46,28 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+  const {username,password}= req.body;
   try {
-  } catch (error) {}
+    const user = await User.findOne({username:username});
+    if(user){
+      const hashed = await bcrypt.compare(password,user.password)
+        if(hashed)
+        { 
+            return res.status(200).json({
+                message:"user loggedIn successfully",
+                username
+            })
+        }
+          return res.json({
+            message:"not a valid username or password",
+            hashed
+          }).status(400)
+    }
+  } catch (error) {
+    res.json({
+      message:"something went wrong"
+    }).status(400);
+  }
 };
 export const updateUsers = async (req: Request, res: Response) => {
   const {id} = req.params;
