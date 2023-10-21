@@ -1,4 +1,4 @@
-require('./db/db');
+import {connectToDatabase} from './db/db';
 import express, { Request, Response, NextFunction } from 'express';
 import {
   deleteUsers,
@@ -51,6 +51,10 @@ app.put('/updateusers/:id', updateUsers);
 // delete users
 app.delete('/deleteusers/:id', deleteUsers);
 
-app.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
-});
+function startServer(){
+  app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
+  });
+}
+
+connectToDatabase(startServer)
