@@ -8,6 +8,8 @@ import {
   updateUsers,
 } from './controller/usercontroller';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 app.use(express.json());
 const PORT = 4000;
@@ -24,7 +26,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
       .status(401)
       .json({ message: 'Unauthorized - Token not provided' });
   }
-  const secretKey: string = 'python';
+  const secretKey = process.env.SECRETKEY || "";
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: 'Unauthorized - Invalid token' });
