@@ -1,4 +1,4 @@
-import  {Document} from 'mongoose'
+import  {Date, Document} from 'mongoose'
 
 export interface User1 extends Document{
   username:string,
@@ -12,4 +12,5 @@ export interface Db{
 }
 export interface Iblog{
   blog:string;
+  updatedAt:string
 }
