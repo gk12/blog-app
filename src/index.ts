@@ -1,4 +1,4 @@
-import {connectToDatabase} from './db/db';
+import { connectToDatabase } from './db/db';
 import express, { Request, Response, NextFunction } from 'express';
 import {
   deleteUsers,
@@ -7,6 +7,13 @@ import {
   register,
   updateUsers,
 } from './controller/usercontroller';
+import {
+  createBlogs,
+  updateBlogs,
+  getAllBlogs,
+  deleteBlogs,
+  getAllBlogsByUserId,
+} from './controller/blogcontroller';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -26,7 +33,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
       .status(401)
       .json({ message: 'Unauthorized - Token not provided' });
   }
-  const secretKey = process.env.SECRETKEY || "";
+  const secretKey = process.env.SECRETKEY || '';
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: 'Unauthorized - Invalid token' });
@@ -36,25 +43,24 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-// login user
+// users routes
 app.post('/login', login);
-
-// register user
 app.post('/register', register);
-
-// get all the users
 app.get('/getusers', getUsers);
-
-// update users
 app.put('/updateusers/:id', updateUsers);
-
-// delete users
 app.delete('/deleteusers/:id', deleteUsers);
 
-function startServer(){
+// blog routes
+app.post('/createblogs',verifyToken, createBlogs);
+app.put('/updateblogs/:id',verifyToken, updateBlogs);
+app.delete('/deleteblogs/:id',verifyToken, deleteBlogs);
+app.get('/getblogs', getAllBlogs);
+app.get('/getuserblogs',verifyToken,getAllBlogsByUserId)
+
+function startServer() {
   app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
   });
 }
 
-connectToDatabase(startServer)
+connectToDatabase(startServer);
