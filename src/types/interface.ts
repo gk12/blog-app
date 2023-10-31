@@ -1,4 +1,4 @@
-import  {Date, Document} from 'mongoose'
+import  {AnyObject, Date, Document} from 'mongoose'
 
 export interface User1 extends Document{
   username:string,
@@ -13,4 +13,8 @@ export interface Db{
 export interface Iblog{
   blog:string;
   updatedAt:string
+  commentId:Array<AnyObject>
+}
+export interface Icomments{
+  comment:string;
 }
