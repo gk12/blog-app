@@ -16,7 +16,13 @@ const blogmodel =new mongoose.Schema({
   updatedAt:{
     type:Date,
     default:new Date(),
-  }
+  },
+  commentId:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
 
 })
 

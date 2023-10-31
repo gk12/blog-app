@@ -74,7 +74,11 @@ export const login = async (req: Request, res: Response) => {
         })
         .status(400);
     }
+    return res.json({
+      message:"user not found"
+    })
   } catch (error) {
+    console.log(error)
     res
       .json({
         message: 'something went wrong',
