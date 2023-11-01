@@ -62,7 +62,7 @@ export const getAllBlogsByUserId = async (req: Request, res: Response) => {
   const username = req.user.username;
   try {
    const Uid =  await userId(username);
-   const blogs = await Blog.find({Uid});
+   const blogs = await Blog.find({Uid}).populate('commentId');;
    res.json({
     blogs,
    })

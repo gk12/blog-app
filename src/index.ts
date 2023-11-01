@@ -14,6 +14,11 @@ import {
   deleteBlogs,
   getAllBlogsByUserId,
 } from './controller/blogcontroller';
+import {
+  WriteComment,
+  UpdateComment,
+  DeleteComment,
+} from './controller/commentcontroller';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -51,11 +56,16 @@ app.put('/updateusers/:id', updateUsers);
 app.delete('/deleteusers/:id', deleteUsers);
 
 // blog routes
-app.post('/createblogs',verifyToken, createBlogs);
-app.put('/updateblogs/:id',verifyToken, updateBlogs);
-app.delete('/deleteblogs/:id',verifyToken, deleteBlogs);
+app.post('/createblogs', verifyToken, createBlogs);
+app.put('/updateblogs/:id', verifyToken, updateBlogs);
+app.delete('/deleteblogs/:id', verifyToken, deleteBlogs);
 app.get('/getblogs', getAllBlogs);
-app.get('/getuserblogs',verifyToken,getAllBlogsByUserId)
+app.get('/getuserblogs', verifyToken, getAllBlogsByUserId);
+
+// comment routes
+app.post('/writecomments',verifyToken,WriteComment);
+app.put('/updatecomments',verifyToken,UpdateComment);
+app.delete('/deletecomments/:id',verifyToken,DeleteComment);
 
 function startServer() {
   app.listen(PORT, () => {
