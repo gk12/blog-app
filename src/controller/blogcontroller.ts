@@ -50,7 +50,7 @@ export const updateBlogs = async (req: Request, res: Response) => {
 };
 export const getAllBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs = await Blog.find().populate('commentId');
+    const blogs = await Blog.find().populate('commentId').sort({upvoteCount:-1});
     res.json({
       blogs,
     });
@@ -61,11 +61,11 @@ export const getAllBlogs = async (req: Request, res: Response) => {
 export const getAllBlogsByUserId = async (req: Request, res: Response) => {
   const username = req.user.username;
   try {
-   const Uid =  await userId(username);
-   const blogs = await Blog.find({Uid}).populate('commentId');;
-   res.json({
-    blogs,
-   })
+    const Uid = await userId(username);
+    const blogs = await Blog.find({ Uid }).populate('commentId').sort({upvoteCount:-1});
+    res.json({
+      blogs,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -74,19 +74,51 @@ export const deleteBlogs = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const blog1 = await Blog.findById(id);
-    if(!blog1){
+    if (!blog1) {
       return res.json({
-        message:"blog not found"
-      })
+        message: 'blog not found',
+      });
     }
     await Blog.findByIdAndRemove(id);
     res.json({
-      message:"blog deleted successfully"
-    })
+      message: 'blog deleted successfully',
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    res
+      .json({
+        message: 'something went wrong',
+      })
+      .status(400);
+  }
+};
+export const upvoteBlogs = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const username = req.user.username;
+  const UserId = await userId(username)
+  try {
+    const blog = await Blog.findOne({_id:id});
+    if(blog){
+      const upvotedByArray = blog.upvoteBy || [];
+      const isUserUpvoted =upvotedByArray.includes(UserId);
+      if(upvotedByArray.length === 0 || !isUserUpvoted){
+          let NumberOfUpvotes = blog?.upvoteCount ;
+          NumberOfUpvotes += 1;
+          blog.upvoteCount = NumberOfUpvotes;
+          blog.upvoteBy.push(UserId)
+          blog.save();
+        return res.json({
+          message:"upvote successfully"
+        })
+    }
+    else{
+      return res.end('upvoted');
+    }
+  }
+  } catch (error) {
+    console.log(error);
     res.json({
-      message:'something went wrong'
-    }).status(400)
+      message:"something went wrong"
+    })
   }
 };
