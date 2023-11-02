@@ -23,6 +23,16 @@ const blogmodel =new mongoose.Schema({
       ref: 'Comment',
     },
   ],
+  upvoteCount:{
+    type:Number,
+    default:0
+  },
+  upvoteBy:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }
+  ]
 
 })
 
