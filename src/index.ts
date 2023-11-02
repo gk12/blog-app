@@ -13,6 +13,7 @@ import {
   getAllBlogs,
   deleteBlogs,
   getAllBlogsByUserId,
+  upvoteBlogs,
 } from './controller/blogcontroller';
 import {
   WriteComment,
@@ -61,6 +62,7 @@ app.put('/updateblogs/:id', verifyToken, updateBlogs);
 app.delete('/deleteblogs/:id', verifyToken, deleteBlogs);
 app.get('/getblogs', getAllBlogs);
 app.get('/getuserblogs', verifyToken, getAllBlogsByUserId);
+app.put('/upvoteblogs/:id',verifyToken,upvoteBlogs)
 
 // comment routes
 app.post('/writecomments',verifyToken,WriteComment);

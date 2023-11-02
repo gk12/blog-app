@@ -14,6 +14,8 @@ export interface Iblog{
   blog:string;
   updatedAt:string
   commentId:Array<AnyObject>
+  upvoteCount:number
+  upvoteBy:Array<AnyObject>
 }
 export interface Icomments{
   comment:string;
