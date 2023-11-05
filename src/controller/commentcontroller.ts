@@ -2,13 +2,14 @@ import Comment from '../model/commentModel';
 import express, { Request, Response } from 'express';
 import User from '../model/usermodel';
 import Blog from '../model/blogModel';
+import { Icomments } from '../types/interface';
 const userId = async (username: string) => {
   const user = await User.findOne({ username });
   const Uid = user?._id;
   return Uid;
 };
 export const WriteComment = async (req: Request, res: Response) => {
-  const { comment, Bid } = req.body;
+  const { comment, Bid }:Icomments = req.body;
   const username = req.user.username;
   try {
     const Uid = await userId(username);
@@ -23,7 +24,7 @@ export const WriteComment = async (req: Request, res: Response) => {
   }
 };
 export const UpdateComment = async (req: Request, res: Response) => {
-  const { Bid, comment } = req.body;
+  const { Bid, comment }:Icomments = req.body;
   try {
     const comments = await Comment.findOneAndUpdate({ Bid, comment });
     res.send(comments);

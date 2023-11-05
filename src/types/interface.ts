@@ -6,7 +6,6 @@ export interface User1 extends Document{
   email:string,
   password:string
 }
-
 export interface Db{
   PORT:number
 }
@@ -19,4 +18,5 @@ export interface Iblog{
 }
 export interface Icomments{
   comment:string;
+  Bid:string
 }

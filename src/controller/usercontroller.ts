@@ -53,7 +53,7 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { username, password }:User1 = req.body;
   try {
     const user = await User.findOne({ username: username });
     if (user) {
@@ -88,7 +88,7 @@ export const login = async (req: Request, res: Response) => {
 };
 export const updateUsers = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, password } = req.body;
+  const { name, password }:User1 = req.body;
   try {
     const user = await User.findById(id);
     console.log(user);

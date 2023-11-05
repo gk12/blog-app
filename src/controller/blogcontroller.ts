@@ -2,13 +2,14 @@ import mongoose from 'mongoose';
 import Blog from '../model/blogModel';
 import express, { Request, Response } from 'express';
 import User from '../model/usermodel';
+import { Iblog } from '../types/interface';
 const userId = async (username: string) => {
   const user = await User.findOne({ username });
   const Uid = user?._id;
   return Uid;
 };
 export const createBlogs = async (req: Request, res: Response) => {
-  const { blog } = req.body;
+  const { blog }:Iblog = req.body;
   const username = req.user.username;
   try {
     const Uid = await userId(username);
@@ -26,7 +27,7 @@ export const createBlogs = async (req: Request, res: Response) => {
 
 export const updateBlogs = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { blog } = req.body;
+  const { blog }:Iblog = req.body;
   try {
     const message1 = await Blog.findById(id);
     if (!message1) {
